@@ -26,36 +26,43 @@ protocol HTTPClient {
     
 }
 
-//Swap the HTTPClient shared instance with spy subclass durning tests.
-
-
-//It's implementation of the protcol instead of sub type of abstract class
-class HTTPClientSpy: HTTPClient {
-     func get(from url:URL) {
-        requestedURL = url
-    }
-    
-    var requestedURL: URL?
-}
-
 class RemoteFeedFetcherTests: XCTestCase {
     
     func test_init_NotRequestedFromURL() {
         let url = URL(string: "https://a-url.com")!
-        let client = HTTPClientSpy()
-        _ = RemoteFeedFetcher(url: url, client:client)
+        let (_, client) = makeSUT()
         
         XCTAssertNil(client.requestedURL)
     }
     
     func test_fetch_reuqestedDataFromURL() {
         let url = URL(string: "https://a-given-url.com")!
-        let client = HTTPClientSpy()
-        let sut = RemoteFeedFetcher(url: url, client: client)
+        let (sut, client) = makeSUT(url: url)
         
         sut.fetch()
         
         XCTAssertEqual(client.requestedURL, url)
     }
     
+    // MARK: Helpers
+    
+    private func makeSUT(url: URL = URL(string: "https://a-given-url.com")!) -> (sut: RemoteFeedFetcher, client: HTTPClientSpy) {
+        let client = HTTPClientSpy()
+        let sut =  RemoteFeedFetcher(url: url, client: client)
+        
+        return (sut, client )
+    }
+    
+    //Swap the HTTPClient shared instance with spy subclass durning tests.
+
+
+    //It's implementation of the protcol instead of sub type of abstract class
+    class HTTPClientSpy: HTTPClient {
+         var requestedURL: URL?
+        
+         func get(from url:URL) {
+            requestedURL = url
+        }
+    }
 }
+
