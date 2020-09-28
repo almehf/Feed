@@ -10,25 +10,28 @@ import XCTest
 
 class RemoteFeedFetcher {
     let client: HTTPClient
-    init(client: HTTPClient) {
+    let url: URL
+    
+    init(url: URL, client: HTTPClient) {
+        self.url = url
         self.client = client
     }
     func fetch() {
-        client.get(from: URL(string: "https://a-url.com")!)
+        client.get(from: url)
     }
 }
 
 protocol HTTPClient {
-    func get(from url:URL?)
+    func get(from url:URL)
     
 }
 
 //Swap the HTTPClient shared instance with spy subclass durning tests.
 
 
-//It's implementation of the protcol instead of sub type of abstract class 
+//It's implementation of the protcol instead of sub type of abstract class
 class HTTPClientSpy: HTTPClient {
-     func get(from url:URL?) {
+     func get(from url:URL) {
         requestedURL = url
     }
     
@@ -38,18 +41,21 @@ class HTTPClientSpy: HTTPClient {
 class RemoteFeedFetcherTests: XCTestCase {
     
     func test_init_NotRequestedFromURL() {
+        let url = URL(string: "https://a-url.com")!
         let client = HTTPClientSpy()
-        _ = RemoteFeedFetcher(client:client)
+        _ = RemoteFeedFetcher(url: url, client:client)
         
         XCTAssertNil(client.requestedURL)
     }
     
     func test_fetch_reuqestedDataFromURL() {
+        let url = URL(string: "https://a-given-url.com")!
         let client = HTTPClientSpy()
-        let sut = RemoteFeedFetcher(client: client)
+        let sut = RemoteFeedFetcher(url: url, client: client)
         
         sut.fetch()
-        XCTAssertNotNil(client.requestedURL)
+        
+        XCTAssertEqual(client.requestedURL, url)
     }
     
 }
