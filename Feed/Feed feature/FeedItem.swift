@@ -10,7 +10,7 @@ import Foundation
 
 
 struct FeedItem {
-    let uid: UUID
+    let id: UUID
     let description: String?
     let location: String?
     let ImageURL: String?
