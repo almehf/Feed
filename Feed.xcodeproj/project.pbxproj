@@ -11,6 +11,7 @@
 		40C57D5025226A1C00017F39 /* FeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C57D4F25226A1C00017F39 /* FeedTests.swift */; };
 		40C57D5C25226A2700017F39 /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C57D5B25226A2700017F39 /* FeedItem.swift */; };
 		40C57D5E25226AAD00017F39 /* FeedFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C57D5D25226AAD00017F39 /* FeedFetcher.swift */; };
+		40C57D632522752600017F39 /* RemoteFeedFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C57D622522752600017F39 /* RemoteFeedFetcherTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +32,7 @@
 		40C57D5125226A1C00017F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		40C57D5B25226A2700017F39 /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
 		40C57D5D25226AAD00017F39 /* FeedFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFetcher.swift; sourceTree = "<group>"; };
+		40C57D622522752600017F39 /* RemoteFeedFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedFetcherTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 			children = (
 				40C57D4F25226A1C00017F39 /* FeedTests.swift */,
 				40C57D5125226A1C00017F39 /* Info.plist */,
+				40C57D622522752600017F39 /* RemoteFeedFetcherTests.swift */,
 			);
 			path = FeedTests;
 			sourceTree = "<group>";
@@ -215,6 +218,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40C57D632522752600017F39 /* RemoteFeedFetcherTests.swift in Sources */,
 				40C57D5025226A1C00017F39 /* FeedTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
