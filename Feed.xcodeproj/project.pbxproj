@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		40C57D4B25226A1C00017F39 /* Feed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40C57D4125226A1C00017F39 /* Feed.framework */; };
 		40C57D5025226A1C00017F39 /* FeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C57D4F25226A1C00017F39 /* FeedTests.swift */; };
-		40C57D5225226A1C00017F39 /* Feed.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C57D4425226A1C00017F39 /* Feed.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40C57D5C25226A2700017F39 /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C57D5B25226A2700017F39 /* FeedItem.swift */; };
 		40C57D5E25226AAD00017F39 /* FeedFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C57D5D25226AAD00017F39 /* FeedFetcher.swift */; };
 /* End PBXBuildFile section */
@@ -26,7 +25,6 @@
 
 /* Begin PBXFileReference section */
 		40C57D4125226A1C00017F39 /* Feed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Feed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		40C57D4425226A1C00017F39 /* Feed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
 		40C57D4525226A1C00017F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		40C57D4A25226A1C00017F39 /* FeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		40C57D4F25226A1C00017F39 /* FeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTests.swift; sourceTree = "<group>"; };
@@ -75,7 +73,6 @@
 		40C57D4325226A1C00017F39 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
-				40C57D4425226A1C00017F39 /* Feed.h */,
 				40C57D4525226A1C00017F39 /* Info.plist */,
 				40C57D5B25226A2700017F39 /* FeedItem.swift */,
 				40C57D5D25226AAD00017F39 /* FeedFetcher.swift */,
@@ -99,7 +96,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				40C57D5225226A1C00017F39 /* Feed.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
