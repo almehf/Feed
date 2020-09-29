@@ -67,17 +67,23 @@ class RemoteFeedFetcherTests: XCTestCase {
     
     //It's implementation of the protcol instead of sub type of abstract class
     class HTTPClientSpy: HTTPClient {
-        var requestedURLs = [URL]()
         var completions = [(Error) -> Void]()
+        private var messages = [(url: URL, completion: (Error) -> Void)]()
+        
+        
+        var requestedURLs: [URL] {
+            return messages.map {$0.url}
+        }
+
         
         func get(from url: URL, completion: @escaping (Error) -> Void) {
            
+            messages.append((url, completion))
             completions.append(completion)
-            requestedURLs.append(url)
         }
         
         func complete(with error: Error, at index:Int = 0) {
-        completions[index](error)
+            messages[index].completion(error)
             
         }
     }
