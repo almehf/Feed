@@ -40,10 +40,12 @@ class RemoteFeedFetcherTests: XCTestCase {
     func test_fetch_DeliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         client.error = NSError(domain: "Test", code: 0)
-        var capturedError: RemoteFeedFetcher.Error?
-        sut.fetch { error in capturedError = error}
         
-        XCTAssertEqual(capturedError, .connectivity)
+        var capturedErrors = [RemoteFeedFetcher.Error]()
+        
+        sut.fetch { capturedErrors.append($0)}
+        
+        XCTAssertEqual(capturedErrors, [.connectivity])
     }
     
     
