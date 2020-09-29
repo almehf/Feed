@@ -39,11 +39,13 @@ class RemoteFeedFetcherTests: XCTestCase {
     
     func test_fetch_DeliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-        client.error = NSError(domain: "Test", code: 0)
         
         var capturedErrors = [RemoteFeedFetcher.Error]()
         
         sut.fetch { capturedErrors.append($0)}
+        
+        let clientError = NSError(domain: "Test", code: 0)
+        client.completions[0](clientError)
         
         XCTAssertEqual(capturedErrors, [.connectivity])
     }
@@ -66,12 +68,11 @@ class RemoteFeedFetcherTests: XCTestCase {
     //It's implementation of the protcol instead of sub type of abstract class
     class HTTPClientSpy: HTTPClient {
         var requestedURLs = [URL]()
-        var error: Error?
+        var completions = [(Error) -> Void]()
         
         func get(from url: URL, completion: @escaping (Error) -> Void) {
-            if let error = error {
-                completion(error)
-            }
+           
+            completions.append(completion)
             requestedURLs.append(url)
         }
         
