@@ -21,7 +21,7 @@ class RemoteFeedFetcherTests: XCTestCase {
         let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSUT(url: url)
         
-        sut.fetch()
+        sut.fetch { _ in}
         
         XCTAssertEqual(client.requestedURLs, [url])
     }
@@ -31,8 +31,8 @@ class RemoteFeedFetcherTests: XCTestCase {
         let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSUT(url: url)
         
-        sut.fetch()
-        sut.fetch()
+        sut.fetch { _ in}
+        sut.fetch { _ in}
         
         XCTAssertEqual(client.requestedURLs, [url, url])
     }

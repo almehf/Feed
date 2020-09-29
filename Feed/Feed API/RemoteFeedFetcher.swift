@@ -28,7 +28,7 @@ public final class RemoteFeedFetcher {
         self.url = url
         self.client = client
     }
-    public func fetch(completion: @escaping (Error) -> Void = { _ in}) {
+    public func fetch(completion: @escaping (Error) -> Void ) {
         client.get(from: url) { error in
             completion(.connectivity)
         }
