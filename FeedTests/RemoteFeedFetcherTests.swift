@@ -14,7 +14,7 @@ class RemoteFeedFetcherTests: XCTestCase {
     func test_init_NotRequestedFromURL() {
         let (_, client) = makeSUT()
         
-        XCTAssertNil(client.requestedURL)
+        XCTAssertTrue(client.requestedURLs.isEmpty)
     }
     
     func test_fetch_reuqestedDataFromURL() {
@@ -23,7 +23,7 @@ class RemoteFeedFetcherTests: XCTestCase {
         
         sut.fetch()
         
-        XCTAssertEqual(client.requestedURL, url)
+        XCTAssertEqual(client.requestedURLs, [url])
     }
     
     
@@ -51,11 +51,9 @@ class RemoteFeedFetcherTests: XCTestCase {
 
     //It's implementation of the protcol instead of sub type of abstract class
     class HTTPClientSpy: HTTPClient {
-         var requestedURL: URL?
          var requestedURLs = [URL]()
         
          func get(from url:URL) {
-            requestedURL = url
             requestedURLs.append(url)
         }
     }
