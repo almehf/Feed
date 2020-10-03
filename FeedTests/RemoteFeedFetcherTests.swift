@@ -53,12 +53,18 @@ class RemoteFeedFetcherTests: XCTestCase {
     func test_fetch_deliversErrorOnNon200HTTPResponse() {
         let (sut, client) = makeSUT()
         
-        var capturedErrors = [RemoteFeedFetcher.Error]()
-        sut.fetch {capturedErrors.append($0); print("err:\($0)")}
+        // check less than the value, one value more and couple more randomly
+        let smaples = [199, 201, 300, 400, 500]
+        smaples.enumerated().forEach { index, code in
+            var capturedErrors = [RemoteFeedFetcher.Error]()
+            sut.fetch {capturedErrors.append($0)}
+            
+            client.complete(withStatusCode: code, at: index)
+            
+            XCTAssertEqual(capturedErrors, [.invalidData])
+            
+        }
         
-        client.complete(withStatusCode: 400)
-        
-        XCTAssertEqual(capturedErrors, [.invalidData])
     }
     
     
@@ -83,12 +89,12 @@ class RemoteFeedFetcherTests: XCTestCase {
         var requestedURLs: [URL] {
             return messages.map {$0.url}
         }
-
+        
         
         func get(from url: URL, completion: @escaping (Error?, HTTPURLResponse?) -> Void) {
-           
+            
             messages.append((url, completion))
-//            completions.append(completion)
+            //            completions.append(completion)
         }
         
         func complete(with error: Error, at index:Int = 0) {
@@ -96,11 +102,11 @@ class RemoteFeedFetcherTests: XCTestCase {
             
         }
         
-        func complete(withStatusCode code: Int, st index: Int = 0) {
+        func complete(withStatusCode code: Int, at index: Int = 0) {
             let response = HTTPURLResponse(url: requestedURLs[index],
-             statusCode: code,
-             httpVersion: nil,
-             headerFields: nil
+                                           statusCode: code,
+                                           httpVersion: nil,
+                                           headerFields: nil
             )
             messages[index].completion(nil, response)
         }
