@@ -10,7 +10,7 @@ import Foundation
 //This to prevent the pram for having 4 states
 
 public enum HTTPClientResult {
-    case success(HTTPURLResponse)
+    case success(Data, HTTPURLResponse)
     case faliure(Error)
 }
 
