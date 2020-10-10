@@ -40,14 +40,10 @@ class RemoteFeedFetcherTests: XCTestCase {
     func test_fetch_DeliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        var capturedErrors = [RemoteFeedFetcher.Error]()
-        
-        sut.fetch { capturedErrors.append($0)}
-        
-        let clientError = NSError(domain: "Test", code: 0)
-        client.complete(with: clientError)
-        
-        XCTAssertEqual(capturedErrors, [.connectivity])
+        expect(sut, toCompleteWithError: .connectivity, when:  {
+            let clientError = NSError(domain: "Test", code: 0)
+            client.complete(with: clientError)
+        })
     }
     
     func test_fetch_deliversErrorOnNon200HTTPResponse() {
@@ -56,13 +52,10 @@ class RemoteFeedFetcherTests: XCTestCase {
         // check less than the value, one value more and couple more randomly
         let smaples = [199, 201, 300, 400, 500]
         smaples.enumerated().forEach { index, code in
-            var capturedErrors = [RemoteFeedFetcher.Error]()
-            sut.fetch {capturedErrors.append($0)}
-            
-            client.complete(withStatusCode: code, at: index)
-            
-            XCTAssertEqual(capturedErrors, [.invalidData])
-            
+            expect(sut, toCompleteWithError: .invalidData, when:  {
+                
+                client.complete(withStatusCode: code, at: index)
+            })
         }
         
     }
@@ -70,14 +63,10 @@ class RemoteFeedFetcherTests: XCTestCase {
     func test_fetch_deleiversErrorOn200HTTPResponseWithInvalidJSON() {
         let (sut, client) = makeSUT()
         
-        var capturedErrors = [RemoteFeedFetcher.Error]()
-        sut.fetch {capturedErrors.append($0)}
-        
-        let invlaidJSON = Data(bytes: "invalid json".utf8)
-        client.complete(withStatusCode: 200, data: invlaidJSON)
-        
-        XCTAssertEqual(capturedErrors, [.invalidData])
-        
+        expect(sut, toCompleteWithError: .invalidData, when:  {
+            let invlaidJSON = Data(_: "invalid json".utf8)
+            client.complete(withStatusCode: 200, data: invlaidJSON)
+        })
         
     }
     
@@ -90,6 +79,22 @@ class RemoteFeedFetcherTests: XCTestCase {
         
         return (sut, client )
     }
+    
+    
+    // TO see the failing message in the mainTest func we pass file&line pram
+    private func expect(_ sut:RemoteFeedFetcher, toCompleteWithError error: RemoteFeedFetcher.Error, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+        
+        var capturedErrors = [RemoteFeedFetcher.Error]()
+        sut.fetch {capturedErrors.append($0)}
+        
+        
+        action()
+        XCTAssertEqual(capturedErrors, [error], file: file, line: line)
+    }
+    
+    
+    
+    
     
     //Swap the HTTPClient shared instance with spy subclass durning tests.
     
