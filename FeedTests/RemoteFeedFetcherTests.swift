@@ -45,7 +45,7 @@ class RemoteFeedFetcherTests: XCTestCase {
             client.complete(with: clientError)
         })
     }
-    
+     
     func test_fetch_deliversErrorOnNon200HTTPResponse() {
         let (sut, client) = makeSUT()
         
@@ -67,7 +67,6 @@ class RemoteFeedFetcherTests: XCTestCase {
             let invlaidJSON = Data(_: "invalid json".utf8)
             client.complete(withStatusCode: 200, data: invlaidJSON)
         })
-        
     }
     
     
@@ -84,12 +83,12 @@ class RemoteFeedFetcherTests: XCTestCase {
     // TO see the failing message in the mainTest func we pass file&line pram
     private func expect(_ sut:RemoteFeedFetcher, toCompleteWithError error: RemoteFeedFetcher.Error, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         
-        var capturedErrors = [RemoteFeedFetcher.Error]()
-        sut.fetch {capturedErrors.append($0)}
+        var capturedResults = [RemoteFeedFetcher.Result]()
+        sut.fetch {capturedResults.append($0)}
         
         
         action()
-        XCTAssertEqual(capturedErrors, [error], file: file, line: line)
+        XCTAssertEqual(capturedResults, [.failure(error)], file: file, line: line)
     }
     
     
