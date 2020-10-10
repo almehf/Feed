@@ -40,19 +40,19 @@ class RemoteFeedFetcherTests: XCTestCase {
     func test_fetch_DeliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWithError: .connectivity, when:  {
+        expect(sut, toCompleteWith: .failure(.connectivity), when:  {
             let clientError = NSError(domain: "Test", code: 0)
             client.complete(with: clientError)
         })
     }
-     
+    
     func test_fetch_deliversErrorOnNon200HTTPResponse() {
         let (sut, client) = makeSUT()
         
         // check less than the value, one value more and couple more randomly
         let smaples = [199, 201, 300, 400, 500]
         smaples.enumerated().forEach { index, code in
-            expect(sut, toCompleteWithError: .invalidData, when:  {
+            expect(sut, toCompleteWith: .failure(.invalidData), when:  {
                 
                 client.complete(withStatusCode: code, at: index)
             })
@@ -63,7 +63,7 @@ class RemoteFeedFetcherTests: XCTestCase {
     func test_fetch_deleiversErrorOn200HTTPResponseWithInvalidJSON() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWithError: .invalidData, when:  {
+        expect(sut, toCompleteWith: .failure(.invalidData), when:  {
             let invlaidJSON = Data(_: "invalid json".utf8)
             client.complete(withStatusCode: 200, data: invlaidJSON)
         })
@@ -73,15 +73,11 @@ class RemoteFeedFetcherTests: XCTestCase {
         
         let (sut, client) = makeSUT()
         
-        var capturedResults = [RemoteFeedFetcher.Result]()
-        sut.fetch { capturedResults.append($0) }
+        expect(sut, toCompleteWith: .success([]), when: {
+            let emptyListJSON = Data("{\"items\": []}".utf8)
+            client.complete(withStatusCode: 200, data: emptyListJSON)
+        })
         
-        let emptyListJSON = Data("{\"items\": []}".utf8)
-        client.complete(withStatusCode: 200, data: emptyListJSON)
-        
-        XCTAssertEqual(capturedResults, [.success([])])
-        
-
     }
     
     
@@ -96,14 +92,14 @@ class RemoteFeedFetcherTests: XCTestCase {
     
     
     // TO see the failing message in the mainTest func we pass file&line pram
-    private func expect(_ sut:RemoteFeedFetcher, toCompleteWithError error: RemoteFeedFetcher.Error, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+    private func expect(_ sut:RemoteFeedFetcher, toCompleteWith result: RemoteFeedFetcher.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         
         var capturedResults = [RemoteFeedFetcher.Result]()
         sut.fetch {capturedResults.append($0)}
         
         
         action()
-        XCTAssertEqual(capturedResults, [.failure(error)], file: file, line: line)
+        XCTAssertEqual(capturedResults, [result], file: file, line: line)
     }
     
     
